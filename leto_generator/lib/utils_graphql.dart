@@ -153,8 +153,7 @@ Expression inferType(
       nonNullable && nullable != true ? exp.property('nonNull').call([]) : exp;
 
   // Check customTypes from generator config
-  final typeName =
-      type.getDisplayString(withNullability: false).split('<').first;
+  final typeName = type.getDisplayString().split('<').first;
   final customType = customTypes.firstWhereOrNull((t) => t.name == typeName);
   if (customType != null) {
     return _wrapNullability(refer(customType.getter, customType.import));
@@ -269,8 +268,8 @@ Expression inferType(
         );
       }
     }
-    final _namePrefix = typeElement.enclosingElement is ClassElement
-        ? '${typeElement.enclosingElement!.name!}.'
+    final _namePrefix = typeElement.enclosingElement3 is ClassElement
+        ? '${typeElement.enclosingElement3!.name!}.'
         : '';
     log.warning(
       'Cannot infer the GraphQLType for field $_namePrefix$name (type=$type).'
@@ -307,5 +306,5 @@ String getReturnType(DartType _retType) {
   //       '<${_retType.typeArguments.map((t) => getReturnType(t)).join(',')}>';
   //   // }
   // }
-  return _retType.getDisplayString(withNullability: true);
+  return _retType.getDisplayString();
 }

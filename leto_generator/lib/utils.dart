@@ -135,9 +135,9 @@ String? getAttachments(Element element) {
   //     .annotationsOf(element).expand((e) => e.toListValue()?.map((e) => e.));
   String fieldAnnotations = '';
   if (element is ParameterElement &&
-      element.enclosingElement is ConstructorElement) {
-    final constructor = element.enclosingElement! as ConstructorElement;
-    final field = constructor.enclosingElement.getField(element.name);
+      element.enclosingElement3 is ConstructorElement) {
+    final constructor = element.enclosingElement3! as ConstructorElement;
+    final field = constructor.enclosingElement3.getField(element.name);
     if (field != null && field.type.element == element.type.element) {
       fieldAnnotations = getAttachments(field) ?? '';
       if (fieldAnnotations.isNotEmpty) {
@@ -202,9 +202,9 @@ Future<String> documentationOfParameter(
     if (comm.trim().isNotEmpty) return _cleanDocComment(comm);
   } catch (_) {}
 
-  final parent = parameter.enclosingElement;
+  final parent = parameter.enclosingElement3;
   if (parent is ConstructorElement) {
-    final field = parent.enclosingElement.getField(parameter.name);
+    final field = parent.enclosingElement3.getField(parameter.name);
     if (field != null && field.documentationComment != null) {
       return _cleanDocComment(field.documentationComment!);
     }
@@ -240,9 +240,8 @@ String dartObjectToString(DartObject v) {
   if (v.toBoolValue() != null) return v.toBoolValue().toString();
   if (v.toIntValue() != null) return v.toIntValue().toString();
   if (v.toDoubleValue() != null) return v.toDoubleValue().toString();
-  if (v.toSymbolValue() != null) return '#' + v.toSymbolValue()!;
-  if (v.toTypeValue() != null)
-    return v.toTypeValue()!.getDisplayString(withNullability: true);
+  if (v.toSymbolValue() != null) return '#${v.toSymbolValue()!}';
+  if (v.toTypeValue() != null) return v.toTypeValue()!.getDisplayString();
   if (v.toListValue() != null) {
     return 'const [${v.toListValue()!.map(dartObjectToString).join(', ')}]';
   }
@@ -262,7 +261,7 @@ String dartObjectToString(DartObject v) {
       if (field.isEnumConstant && field.isStatic) {
         final value = type.element.getField(field.name)!.computeConstantValue();
         if (value == v) {
-          return '${type.name}.${field.name}';
+          return '${type.getDisplayString()}.${field.name}';
         }
       }
     }

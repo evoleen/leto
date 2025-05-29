@@ -95,7 +95,7 @@ Future<String> _buildForElement(
       final attachments = getAttachments(element);
       final returnType = (genericTypeWhenFutureOrStream(element.returnType) ??
               element.returnType)
-          .getDisplayString(withNullability: true);
+          .getDisplayString();
 
       b.body.add(Code('''
 GraphQLObjectField<$returnType, Object?, Object?> get 
@@ -209,7 +209,7 @@ GraphQLArg argInfoFromElement(Element element) {
 }
 
 String executeCodeForExecutable(ExecutableElement elem) {
-  final parent = elem.enclosingElement;
+  final parent = elem.enclosingElement3;
   final prefix =
       elem.isStatic && parent is ClassElement ? '${parent.name}.' : '';
   return '$prefix${elem.name}()';
@@ -253,7 +253,7 @@ Future<String> resolverFunctionBodyFromElement(
 
     validations.add(
       'final _validation = $className(${params.map((e) {
-        final type = e.type.getDisplayString(withNullability: true);
+        final type = e.type.getDisplayString();
         final getter =
             isReqCtx(e.type) ? 'ctx' : '(args["${e.name}"] as $type)';
         return '${e.isNamed ? '${e.name}:' : ''}$getter';
@@ -267,13 +267,13 @@ Future<String> resolverFunctionBodyFromElement(
     final argName = e.name;
     if (isReqCtx(e.type)) {
       const value = 'ctx';
-      params.add(e.isPositional ? value : '${argName}:$value');
+      params.add(e.isPositional ? value : '$argName:$value');
     } else {
-      final type = e.type.getDisplayString(withNullability: true);
-      final typeName = e.type.getDisplayString(withNullability: false);
+      final type = e.type.getDisplayString();
+      final typeName = e.type.getDisplayString();
       final argInfo = argInfoFromElement(e);
       final value =
-          argInfo.inline ? '${argName}Arg' : '(args["${argName}"] as $type)';
+          argInfo.inline ? '${argName}Arg' : '(args["$argName"] as $type)';
       if (argInfo.inline) {
         // TODO: 2G support generics
         validations.add(
@@ -287,14 +287,14 @@ Future<String> resolverFunctionBodyFromElement(
         validationsInParams.add(e);
       }
 
-      params.add(e.isPositional ? value : '${argName}:$value');
+      params.add(e.isPositional ? value : '$argName:$value');
 
       if (!hasFunctionValidation && _hasValidation(e.type.element)) {
         makeGlobalValidation = true;
         final resultName = '${argName}ValidationResult';
         final _addToMap = argInfo.inline
             ? validationErrorMapAddAll(resultName)
-            : "validationErrorMap['${argName}'] = [$resultName.toError(property: '${argName}')!];";
+            : "validationErrorMap['$argName'] = [$resultName.toError(property: '$argName')!];";
         validations.add('''
 if ($value != null) {
   final $resultName = ${typeName}Validation.fromValue($value as $typeName);
@@ -333,7 +333,7 @@ if (validationErrorMap.isNotEmpty) {
       ? (classResolver?.instantiateCode ?? 'obj.')
       : '';
   if (handlingFuture) {
-    final _resolverClassName = element.enclosingElement.name;
+    final _resolverClassName = element.enclosingElement3.name;
     _getter = 'final _call = ($_resolverClassName r) => r.$_call;\n'
         ' final FutureOr<$_resolverClassName> _obj = \n// ignore: unnecessary_non_null_assertion\n$_getter;'
         ' if (_obj is Future<$_resolverClassName>) return _obj.then(_call);'
@@ -376,14 +376,14 @@ Future<ClassResolver?> getClassResolver(
   ExecutableElement element,
 ) async {
   final classAnnot = _classResolverTypeChecker
-      .firstAnnotationOfExact(element.enclosingElement);
+      .firstAnnotationOfExact(element.enclosingElement3);
 
   String? instantiateCode = classAnnot == null
       ? null
       : classAnnot.getField('instantiateCode')?.toStringValue() ??
           ctx.config.instantiateCode;
   if (classAnnot != null && instantiateCode == null) {
-    final parent = element.enclosingElement as ClassElement;
+    final parent = element.enclosingElement3 as ClassElement;
     final ref = parent.getGetter('ref');
     if (ref == null) {
       throw Exception(
@@ -405,7 +405,7 @@ Future<ClassResolver?> getClassResolver(
   if (instantiateCode != null) {
     instantiateCode = instantiateCode.replaceAll(
       '{{name}}',
-      element.enclosingElement.name!,
+      element.enclosingElement3.name!,
     );
   }
 
