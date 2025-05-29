@@ -209,7 +209,7 @@ GraphQLArg argInfoFromElement(Element element) {
 }
 
 String executeCodeForExecutable(ExecutableElement elem) {
-  final parent = elem.enclosingElement;
+  final parent = elem.enclosingElement3;
   final prefix =
       elem.isStatic && parent is ClassElement ? '${parent.name}.' : '';
   return '$prefix${elem.name}()';
@@ -333,7 +333,7 @@ if (validationErrorMap.isNotEmpty) {
       ? (classResolver?.instantiateCode ?? 'obj.')
       : '';
   if (handlingFuture) {
-    final _resolverClassName = element.enclosingElement.name;
+    final _resolverClassName = element.enclosingElement3.name;
     _getter = 'final _call = ($_resolverClassName r) => r.$_call;\n'
         ' final FutureOr<$_resolverClassName> _obj = \n// ignore: unnecessary_non_null_assertion\n$_getter;'
         ' if (_obj is Future<$_resolverClassName>) return _obj.then(_call);'
@@ -376,14 +376,14 @@ Future<ClassResolver?> getClassResolver(
   ExecutableElement element,
 ) async {
   final classAnnot = _classResolverTypeChecker
-      .firstAnnotationOfExact(element.enclosingElement);
+      .firstAnnotationOfExact(element.enclosingElement3);
 
   String? instantiateCode = classAnnot == null
       ? null
       : classAnnot.getField('instantiateCode')?.toStringValue() ??
           ctx.config.instantiateCode;
   if (classAnnot != null && instantiateCode == null) {
-    final parent = element.enclosingElement as ClassElement;
+    final parent = element.enclosingElement3 as ClassElement;
     final ref = parent.getGetter('ref');
     if (ref == null) {
       throw Exception(
@@ -405,7 +405,7 @@ Future<ClassResolver?> getClassResolver(
   if (instantiateCode != null) {
     instantiateCode = instantiateCode.replaceAll(
       '{{name}}',
-      element.enclosingElement.name!,
+      element.enclosingElement3.name!,
     );
   }
 

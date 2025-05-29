@@ -135,9 +135,9 @@ String? getAttachments(Element element) {
   //     .annotationsOf(element).expand((e) => e.toListValue()?.map((e) => e.));
   String fieldAnnotations = '';
   if (element is ParameterElement &&
-      element.enclosingElement is ConstructorElement) {
-    final constructor = element.enclosingElement! as ConstructorElement;
-    final field = constructor.enclosingElement.getField(element.name);
+      element.enclosingElement3 is ConstructorElement) {
+    final constructor = element.enclosingElement3! as ConstructorElement;
+    final field = constructor.enclosingElement3.getField(element.name);
     if (field != null && field.type.element == element.type.element) {
       fieldAnnotations = getAttachments(field) ?? '';
       if (fieldAnnotations.isNotEmpty) {
@@ -202,9 +202,9 @@ Future<String> documentationOfParameter(
     if (comm.trim().isNotEmpty) return _cleanDocComment(comm);
   } catch (_) {}
 
-  final parent = parameter.enclosingElement;
+  final parent = parameter.enclosingElement3;
   if (parent is ConstructorElement) {
-    final field = parent.enclosingElement.getField(parameter.name);
+    final field = parent.enclosingElement3.getField(parameter.name);
     if (field != null && field.documentationComment != null) {
       return _cleanDocComment(field.documentationComment!);
     }

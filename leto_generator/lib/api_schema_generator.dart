@@ -153,7 +153,9 @@ GraphQLSchema get graphqlApiSchema => _graphqlApiSchema ??= GraphQLSchema(
 
 ''';
       try {
-        out = DartFormatter().format(out);
+        out =
+            DartFormatter(languageVersion: DartFormatter.latestLanguageVersion)
+                .format(out);
       } catch (_) {}
 
       await buildStep.writeAsString(_allFileOutput(basePath, buildStep), out);

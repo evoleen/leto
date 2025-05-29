@@ -269,8 +269,8 @@ Expression inferType(
         );
       }
     }
-    final _namePrefix = typeElement.enclosingElement is ClassElement
-        ? '${typeElement.enclosingElement!.name!}.'
+    final _namePrefix = typeElement.enclosingElement3 is ClassElement
+        ? '${typeElement.enclosingElement3!.name!}.'
         : '';
     log.warning(
       'Cannot infer the GraphQLType for field $_namePrefix$name (type=$type).'
