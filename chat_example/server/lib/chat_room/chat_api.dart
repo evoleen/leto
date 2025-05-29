@@ -54,7 +54,7 @@ class DeepEqualMap<K, V> {
   const DeepEqualMap(this.map);
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         other is DeepEqualMap &&
             const DeepCollectionEquality().equals(map, other.map);

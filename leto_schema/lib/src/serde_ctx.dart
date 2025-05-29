@@ -184,7 +184,7 @@ class GenericHelp<T> implements GenericHelpSingle<T> {
   GenericHelp<T> get generic => this;
 
   @override
-  bool operator ==(Object? other) => other is GenericHelp && other.type == T;
+  bool operator ==(Object other) => other is GenericHelp && other.type == T;
 
   @override
   int get hashCode => T.hashCode;
@@ -214,7 +214,7 @@ class GenericHelpWithExtends<T extends E, E> implements GenericHelpSingle<T> {
   GenericHelp<T> get generic => GenericHelp<T>();
 
   @override
-  bool operator ==(Object? other) =>
+  bool operator ==(Object other) =>
       other is GenericHelpWithExtends &&
       other.type == T &&
       other.extendsType == E;
