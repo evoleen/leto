@@ -240,9 +240,8 @@ String dartObjectToString(DartObject v) {
   if (v.toBoolValue() != null) return v.toBoolValue().toString();
   if (v.toIntValue() != null) return v.toIntValue().toString();
   if (v.toDoubleValue() != null) return v.toDoubleValue().toString();
-  if (v.toSymbolValue() != null) return '#' + v.toSymbolValue()!;
-  if (v.toTypeValue() != null)
-    return v.toTypeValue()!.getDisplayString(withNullability: true);
+  if (v.toSymbolValue() != null) return '#${v.toSymbolValue()!}';
+  if (v.toTypeValue() != null) return v.toTypeValue()!.getDisplayString();
   if (v.toListValue() != null) {
     return 'const [${v.toListValue()!.map(dartObjectToString).join(', ')}]';
   }
@@ -262,7 +261,7 @@ String dartObjectToString(DartObject v) {
       if (field.isEnumConstant && field.isStatic) {
         final value = type.element.getField(field.name)!.computeConstantValue();
         if (value == v) {
-          return '${type.name}.${field.name}';
+          return '${type.getDisplayString()}.${field.name}';
         }
       }
     }

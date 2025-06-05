@@ -95,7 +95,7 @@ Future<String> _buildForElement(
       final attachments = getAttachments(element);
       final returnType = (genericTypeWhenFutureOrStream(element.returnType) ??
               element.returnType)
-          .getDisplayString(withNullability: true);
+          .getDisplayString();
 
       b.body.add(Code('''
 GraphQLObjectField<$returnType, Object?, Object?> get 
@@ -253,7 +253,7 @@ Future<String> resolverFunctionBodyFromElement(
 
     validations.add(
       'final _validation = $className(${params.map((e) {
-        final type = e.type.getDisplayString(withNullability: true);
+        final type = e.type.getDisplayString();
         final getter =
             isReqCtx(e.type) ? 'ctx' : '(args["${e.name}"] as $type)';
         return '${e.isNamed ? '${e.name}:' : ''}$getter';
@@ -267,13 +267,13 @@ Future<String> resolverFunctionBodyFromElement(
     final argName = e.name;
     if (isReqCtx(e.type)) {
       const value = 'ctx';
-      params.add(e.isPositional ? value : '${argName}:$value');
+      params.add(e.isPositional ? value : '$argName:$value');
     } else {
-      final type = e.type.getDisplayString(withNullability: true);
-      final typeName = e.type.getDisplayString(withNullability: false);
+      final type = e.type.getDisplayString();
+      final typeName = e.type.getDisplayString();
       final argInfo = argInfoFromElement(e);
       final value =
-          argInfo.inline ? '${argName}Arg' : '(args["${argName}"] as $type)';
+          argInfo.inline ? '${argName}Arg' : '(args["$argName"] as $type)';
       if (argInfo.inline) {
         // TODO: 2G support generics
         validations.add(
@@ -287,14 +287,14 @@ Future<String> resolverFunctionBodyFromElement(
         validationsInParams.add(e);
       }
 
-      params.add(e.isPositional ? value : '${argName}:$value');
+      params.add(e.isPositional ? value : '$argName:$value');
 
       if (!hasFunctionValidation && _hasValidation(e.type.element)) {
         makeGlobalValidation = true;
         final resultName = '${argName}ValidationResult';
         final _addToMap = argInfo.inline
             ? validationErrorMapAddAll(resultName)
-            : "validationErrorMap['${argName}'] = [$resultName.toError(property: '${argName}')!];";
+            : "validationErrorMap['$argName'] = [$resultName.toError(property: '$argName')!];";
         validations.add('''
 if ($value != null) {
   final $resultName = ${typeName}Validation.fromValue($value as $typeName);

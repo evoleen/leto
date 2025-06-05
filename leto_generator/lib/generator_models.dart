@@ -151,9 +151,8 @@ Future<UnionVarianInfo> classInfoFromConstructor(
   GraphQLObject? classConfig,
 }) async {
   final className = ReCase(clazz.name).pascalCase;
-  final redirectedName = con.redirectedConstructor?.returnType
-          .getDisplayString(withNullability: false) ??
-      con.name;
+  final redirectedName =
+      con.redirectedConstructor?.returnType.getDisplayString() ?? con.name;
 
   final generics = Map.fromEntries(
     clazz.typeParameters.map((e) => MapEntry(e.name, e)),
@@ -344,7 +343,7 @@ class UnionVarianInfo {
     return typeParams.isNotEmpty
         ? '<${typeParams.map((e) {
             final _e = ext && e.bound != null
-                ? ' extends ${e.bound!.getDisplayString(withNullability: true)}'
+                ? ' extends ${e.bound!.getDisplayString()}'
                 : '';
 
             return '${e.displayName}$_e';
