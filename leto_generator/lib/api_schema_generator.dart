@@ -88,7 +88,8 @@ class ValidatorsLibGenerator implements Builder {
             },
           )
           .map((e) {
-            final typeName = e.thisType.getDisplayString();
+            final typeName =
+                e.thisType.getDisplayString(withNullability: false);
             return '${ReCase(typeName).camelCase}$serializerSuffix,';
           })
           .toSet()

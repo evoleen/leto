@@ -261,7 +261,7 @@ String dartObjectToString(DartObject v) {
       if (field.isEnumConstant && field.isStatic) {
         final value = type.element.getField(field.name)!.computeConstantValue();
         if (value == v) {
-          return '${type.getDisplayString()}.${field.name}';
+          return '${type.name}.${field.name}';
         }
       }
     }
