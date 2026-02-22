@@ -270,7 +270,7 @@ Future<String> resolverFunctionBodyFromElement(
       params.add(e.isPositional ? value : '$argName:$value');
     } else {
       final type = e.type.getDisplayString();
-      final typeName = e.type.getDisplayString();
+      final typeName = e.type.getDisplayString(withNullability: false);
       final argInfo = argInfoFromElement(e);
       final value =
           argInfo.inline ? '${argName}Arg' : '(args["$argName"] as $type)';

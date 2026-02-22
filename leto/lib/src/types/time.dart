@@ -373,7 +373,7 @@ class Time implements Comparable<Time> {
       _utcMicroseconds.compareTo(other._utcMicroseconds);
 
   @override
-  bool operator ==(Object? other) =>
+  bool operator ==(Object other) =>
       other is Time &&
       other.microsecondsSinceMidnight == microsecondsSinceMidnight &&
       other._timezoneMinutesOffset == _timezoneMinutesOffset;

@@ -153,7 +153,8 @@ Expression inferType(
       nonNullable && nullable != true ? exp.property('nonNull').call([]) : exp;
 
   // Check customTypes from generator config
-  final typeName = type.getDisplayString().split('<').first;
+  final typeName =
+      type.getDisplayString(withNullability: false).split('<').first;
   final customType = customTypes.firstWhereOrNull((t) => t.name == typeName);
   if (customType != null) {
     return _wrapNullability(refer(customType.getter, customType.import));
